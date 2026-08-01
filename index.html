@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>국어 1등급 어휘력 복습 웹앱</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- React & ReactDOM CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <!-- Babel Standalone CDN -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const BookOpen = ({ className = "w-6 h-6" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      </svg>
+    );
+
+    const CheckCircle = ({ className = "w-6 h-6" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    );
+
+    const RotateCcw = ({ className = "w-6 h-6" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+      </svg>
+    );
+
+    const Award = ({ className = "w-6 h-6" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+      </svg>
+    );
+
+    const ChevronRight = ({ className = "w-6 h-6" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+      </svg>
+    );
+
+    const Layers = ({ className = "w-6 h-6" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+      </svg>
+    );
+
+    const Check = ({ className = "w-6 h-6" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+      </svg>
+    );
+
+    const ArrowRight = ({ className = "w-6 h-6" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+      </svg>
+    );
+
+    const Filter = ({ className = "w-6 h-6" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+      </svg>
+    );
+
+    const Home = ({ className = "w-6 h-6" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+      </svg>
+    );
+
+    const RefreshCw = ({ className = "w-6 h-6" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+      </svg>
+    );
+
+    const AlertCircle = ({ className = "w-6 h-6" }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    );
+
+    const DICTIONARY_VOCAB_DB = {
+      1: [
+        { w: '가탈', passages: ['소녀는 소년이 하는 일마다 짓궂게 ( )을/를 부리며 방해했다.', '그 사람은 매사에 ( )을/를 잡아 일을 까다롭게 만든다.', '어려운 협상 자리에서 상대방이 ( )을/를 잡아 난항을 겪었다.'], def: '까다롭게 꼬투리를 잡는 짓', distractors: ['어깃장', '너스레', '헤살', '넋두리'] },
+        { w: '고명딸', passages: ['그녀는 위로 오빠가 넷이나 있는 집안의 ( )(으)로 태어나 사랑을 독차지했다.', '집안의 귀한 ( )(으)로서 언제나 식구들의 보호를 받았다.', '어머니는 귀한 ( )의 결혼식을 준비하며 눈시울을 적셨다.'], def: '아들 많은 집에 하나밖에 없는 딸', distractors: ['선머슴', '고갱이', '화수분', '말미'] },
+        { w: '선잠', passages: ['시험 때문에 긴장을 한 탓인지 간밤에는 내내 ( )만 들었다.', '소음 때문에 깊이 자지 못하고 ( )을/를 잤다.', '몸이 피곤하여 낮에 잠시 ( )을/를 청했다.'], def: '깊이 들지 못하고 설치게 자는 잠', distractors: ['토막잠', '나비잠', '겉잠', '밤잠'] },
+        { w: '어깃장', passages: ['순순히 협조하려는 듯하더니 차츰 꼬투리를 잡으며 ( )을/를 놓기 시작했다.', '남들이 다 찬성하는 일에 혼자서 ( )을/를 놓아 분위기를 그르쳤다.', '그는 자꾸만 내 의견에 ( )을/를 놓아 일을 그르치게 했다.'], def: '순순히 따르지 아니하고 엇나가는 행동이나 훼방', distractors: ['가탈', '너스레', '헤살', '넋두리'] },
+        { w: '너스레', passages: ['그는 자기가 실수해 놓고는 능청스럽게 ( )을/를 떨었다.', '어색한 분위기를 풀려고 괜한 ( )을/를 늘어놓았다.', '그의 현란한 ( )에 속아 사람들은 웃음을 터뜨렸다.'], def: '수다스럽게 너스레를 떠는 말이나 행동', distractors: ['가탈', '어깃장', '넋두리', '헤살'] },
+        { w: '깜냥', passages: ['제 ( )엔 나름대로 최선을 다했다고 생각한다.', '그는 자신의 ( )을/를 넘어서는 큰 책임을 맡게 되었다.', '그 일을 해낼 만한 ( )이/가 안 된다면 거절하는 것이 낫다.'], def: '일을 해낼 만한 능력이나 지혜', distractors: ['가탈', '말미', '고갱이', '섬돌'] },
+        { w: '달포', passages: ['계획했던 이사를 하기 위해 ( ) 가량의 준비 시간이 필요했다.', '그가 고향을 떠난 지 이미 ( )이/가 지났다.', '병원에 입원한 지 ( ) 만에 비로소 퇴원할 수 있었다.'], def: '한 달이 조금 넘는 기간', distractors: ['섣달', '말미', '고갱이', '갈무리'] },
+        { w: '말미', passages: ['그는 잠시 생각할 ( )을/를 달라고 요청했다.', '이틀간의 ( )을/를 얻어 여행을 다녀왔다.', '과제를 제출하기 전 며칠의 ( )을/를 더 받았다.'], def: '어떤 일의 일정한 여유나 겨를', distractors: ['달포', '섣달', '고갱이', '화수분'] },
+        { w: '헤살', passages: ['아이들은 짓궂게 ( )을/를 부리며 놀이에 재를 뿌렸다.', '남의 정성 어린 일에 ( )을/를 놓아서는 안 된다.', '괜히 옆에서 ( )을/를 부려 일이 더디게 진행되었다.'], def: '일에 심술을 부려 방해하는 짓', distractors: ['가탈', '어깃장', '너스레', '넋두리'] },
+        { w: '고갱이', passages: ['이 책은 한국 현대 소설의 ( )만을 담은 모음집이다.', '사업의 ( )가 되는 핵심 아이디어를 도출해 냈다.', '배추의 고소한 ( )를 빼먹는 맛이 쏠쏠했다.'], def: '사물의 가장 으뜸이 되는 중심 부분', distractors: ['깜냥', '말미', '달포', '화수분'] },
+        { w: '섣달', passages: ['( ) 그믐이 지나면 음력으로 새해 아침이 찾아온다.', '추운 ( ) 바람에 온몸이 오들오들 떨렸다.', '( ) 그믐날 밤에는 잠을 자지 않는 풍습이 있었다.'], def: '음력으로 한 해의 마지막 달인 열두째 달', distractors: ['달포', '말미', '오금', '섬돌'] },
+        { w: '섬돌', passages: ['시골집 ( ) 위에 어머니의 신발이 나란히 놓여 있었다.', '마루에서 내려서며 ( )을/를 밟고 마당으로 나갔다.', '햇살이 따스하게 내리쬐는 ( )에 앉아 볕을 쬐었다.'], def: '집채의 앞뒤에 얹은 돌층계', distractors: ['말미', '오금', '고갱이', '가탈'] },
+        { w: '오금', passages: ['오랫동안 자리에 앉아 있었더니 ( )이/가 저려 자세를 바꿨다.', '너무 무서운 광경을 보자 ( )이/가 저려 걸을 수가 없었다.', '긴장한 탓인지 ( )이/가 팽팽하게 당겨오는 느낌이었다.'], def: '무릎의 뒤 오목한 부분', distractors: ['섬돌', '섣달', '말미', '깜냥'] },
+        { w: '갈무리', passages: ['겨우내 보관했던 농기구의 ( )을/를 깔끔하게 마쳤다.', '한 해 동안 쌓은 성과를 잘 ( )하여 다음 단계를 준비하자.', '서류 상자의 ( )가 제대로 되지 않아 찾느라 애를 먹었다.'], def: '물건을 정리하여 간수함 또는 일의 끝마무리', distractors: ['넋두리', '개숫물', '도가니', '마파람'] }
+      ],
+      2: [
+        { w: '매몰차다', passages: ['그녀는 오랜 친구의 간곡한 부탁을 ( ) 거절하고 차갑게 돌아섰다.', '감독은 선수들의 사정을 봐주지 않고 ( ) 다그쳤다.', '그 사람은 아무리 급한 사정이라도 ( ) 끊어버린다.'], def: '인정 없이 몹시 차갑고 쌀쌀맞다', distractors: ['수더분하다', '생뚱맞다', '올곧다', '수려하다'] },
+        { w: '을씨년스럽다', passages: ['비가 올 것처럼 어둡고 살짓이 스산한 폐가의 모습이 자못 ( ).', '겨울 바람이 부는 황량한 거리가 ( ) 보였다.', '안개가 짙게 낀 새벽 강가가 ( ) 쓸쓸했다.'], def: '날씨나 분위기가 쓸쓸하고 으스스하다', distractors: ['상큼하다', '수더분하다', '생뚱맞다', '옹골지다'] },
+        { w: '굼뜨다', passages: ['손놀림이 너무 ( ) 움직이는 바람에 서류 처리에 오랜 시간이 걸렸다.', '동작이 ( ) 느려 남들보다 항상 지체되었다.', '둔하고 ( ) 행동 때문에 작업의 효율이 떨어졌다.'], def: '동작이나 일의 진행이 느리다', distractors: ['재빠르다', '날쌔다', '올곧다', '매몰차다'] },
+        { w: '생뚱맞다', passages: ['갑자기 시의적절하지 않고 ( ) 엉뚱한 이야기를 꺼내 모두를 당황하게 했다.', '고요한 연회장에서 ( ) 큰 소리로 노래를 불렀다.', '문맥에 맞지 않는 ( ) 대답이 돌아왔다.'], def: '상황에 맞지 아니하고 생뚱한 데가 있다', distractors: ['수더분하다', '올곧다', '매몰차다', '굼뜨다'] },
+        { w: '수더분하다', passages: ['그는 성품이 ( ) 누구와도 쉽게 친해졌다.', '까다롭지 않고 ( ) 인상을 주는 사람이다.', '외모는 평범하지만 성격이 ( ) 인기가 많다.'], def: '성질이 까다롭지 아니하고 순하고 소박하다', distractors: ['매몰차다', '생뚱맞다', '굼뜨다', '스산하다'] },
+        { w: '옹골지다', passages: ['체구는 작지만 속이 ( ) 실속 있는 친구다.', '그녀의 말투는 야무지고 ( ) 거침이 없었다.', '어린 나이에도 생각이 ( ) 어른스럽다.'], def: '속이 실하고 야무지다', distractors: ['수더분하다', '생뚱맞다', '스산하다', '을씨년스럽다'] },
+        { w: '껄끄럽다', passages: ['어색한 소문 때문에 서로 사이가 ( ) 자리를 일찍 떴다.', '손에 흙이 묻어 피부가 ( ) 느껴진다.', '질문하기가 조금 ( ) 분위기였다.'], def: '원만치 못하고 거북하거나 꺼칠꺼칠하다', distractors: ['수더분하다', '상큼하다', '생뚱맞다', '올곧다'] },
+        { w: '겸연쩍다', passages: ['자신의 실수가 드러나자 그는 ( ) 머리를 긁적였다.', '칭찬을 받자 약간 ( ) 미소를 지었다.', '어색하고 ( ) 웃음으로 상황을 넘겼다.'], def: '쑥스럽거나 미안하여 어색하다', distractors: ['매몰차다', '생뚱맞다', '수더분하다', '옹골지다'] },
+        { w: '가쁘다', passages: ['숨이 ( ) 오르도록 숨을 헐떡이며 가파른 언덕길을 올랐다.', '작업 분량이 너무 많아 다 해내기가 몹시 ( ).', '갑작스러운 운동으로 가슴이 답답하고 숨이 ( ).'], def: '숨이 차거나 힘에 겹다', distractors: ['선선하다', '상큼하다', '올곧다', '투박하다'] },
+        { w: '새큼하다', passages: ['잘 익은 김치에서 ( ) 맛과 향이 피어올라 입맛을 돋웠다.', '음식이 약간 쉬었는지 ( ) 냄새가 났다.', '상큼하고 ( ) 과일 주스를 한 잔 마셨다.'], def: '맛이나 냄새 따위가 맛깔스럽게 조금 시다', distractors: ['쾨쾨하다', '투박하다', '스산하다', '껄끄럽다'] },
+        { w: '섣부르다', passages: ['잘 알지도 못하면서 ( ) 판단을 내리는 것은 위험하다.', '경험이 부족한 상태에서 ( ) 행동은 삼가라.', '( ) 대처로 인해 일을 망치고 말았다.'], def: '일하는 태도나 솜씨가 어설프거나 미흡하다', distractors: ['올곧다', '수더분하다', '옹골지다', '매몰차다'] },
+        { w: '쾨쾨하다', passages: ['오랫동안 문을 닫아둔 창고에서 ( ) 냄새가 풍겼다.', '습한 지하실에 접어들자 ( ) 악취가 가득했다.', '빨래를 제대로 말리지 않아 ( ) 냄새가 난다.'], def: '상하고 찌들어 비위에 거슬릴 정도로 고리다', distractors: ['상큼하다', '새큼하다', '선선하다', '올곧다'] }
+      ],
+      3: [
+        { w: '곧추', passages: ['그는 허리를 ( ) 세우고 바로 앉았다.', '고개를 ( ) 세워 앞을 바라보았다.', '몸을 ( ) 세우며 긴장을 풀지 않았다.'], def: '굽히거나 굽지 아니하고 바르게', distractors: ['내처', '늦추', '일쑤', '짜장'] },
+        { w: '고대', passages: ['그가 오기를 ( ) 기다렸건만 끝내 나타나지 않았다.', '어머니는 아들이 돌아오기를 ( ) 기다리셨다.', '소식을 들을 수 있기를 ( ) 바라고 있었다.'], def: '몹시 안타깝게 기다리는 모양', distractors: ['곰곰', '여북', '적이', '짐짓'] },
+        { w: '되우', passages: ['혼자 머물러 있는 것은 가슴이 답답할 만치 ( ) 괴로운 일이었다.', '추위에 몸을 ( ) 떨었다.', '그는 이번 시험 결과에 ( ) 낙담했다.'], def: '몹시 심하게 또는 아주 꽤', distractors: ['무릇', '섬빽', '얼추', '좀체'] },
+        { w: '사뭇', passages: ['그들의 분위기는 이전과 ( ) 달라져 있었다.', '마음속에 깊이 고마움이 ( ) 밀려왔다.', '그때의 일은 지금 생각해도 ( ) 그립다.'], def: '마음에 가득하게 느껴지도록 또는 전혀 다르게', distractors: ['길래', '노상', '자못', '잼처'] },
+        { w: '내처', passages: ['시작한 김에 쉬지 않고 ( ) 목적지까지 걸어갔다.', '기왕 말이 나온 김에 ( ) 끝까지 밝혀내자.', '멈추지 않고 ( ) 달리다 보니 날이 저물었다.'], def: '어떤 기회에 계속하여 또는 한 걸음에', distractors: ['곧추', '늦추', '일쑤', '짜장'] },
+        { w: '자못', passages: ['그의 진지한 태도에 분위기가 ( ) 숙연해졌다.', '기대 이상의 훌륭한 성과에 ( ) 놀라움을 금치 못했다.', '어머니의 눈빛은 ( ) 심각한 표정을 띠고 계셨다.'], def: '생각보다 한층 더하게 또는 매우', distractors: ['노상', '길래', '사뭇', '되우'] },
+        { w: '짐짓', passages: ['그는 사실을 다 알면서도 ( ) 모른 척 시치미를 뗐다.', '상대방의 반응을 살피려고 ( ) 엄한 표정을 지어 보였다.', '마음속으로는 기뻤지만 ( ) 무덤덤하게 태도를 유지했다.'], def: '마음과 다르게 일부러 그렇게', distractors: ['곰곰', '여북', '적이', '고대'] }
+      ],
+      4: [
+        { w: '객쩍다', passages: ['그는 분위기를 가라앉히는 ( ) 소리를 늘어놓았다.', '쓸데없는 ( ) 장난을 치다가 핀잔을 들었다.', '상황에 맞지 않는 ( ) 말에 아무도 대답하지 않았다.'], def: '행동이나 말이 엉뚱하고 쓸데없다', distractors: ['발자하다', '살핏하다', '알싸하다', '해사하다'] },
+        { w: '거나하다', passages: ['술에 ( ) 취한 표정으로 잔을 채웠다.', '얼굴에 ( ) 기운이 감돌며 기분이 좋아 보였다.', '술자리가 흥겨워져 기분이 ( ) 올랐다.'], def: '술에 적당히 취하여 기분이 좋다', distractors: ['괄괄하다', '애잔하다', '얍삽하다', '음전하다'] },
+        { w: '솔깃하다', passages: ['상대방의 달콤한 제안에 마음이 ( ).', '투자 수익률이 높다는 말에 귀가 ( ) 해졌다.', '그의 매력적인 설명에 모두들 ( ) 눈빛을 보였다.'], def: '마음이 끌려 흥미롭다', distractors: ['데데하다', '매몰차다', '머쓱하다', '추레하다'] },
+        { w: '데퉁스럽다', passages: ['그는 칭찬에 ( ) 반응을 보이며 멋쩍어했다.', '말투가 좀 ( ) 오해를 사기 쉽다.', '생각 없이 ( ) 행동하여 시선을 끌었다.'], def: '말이나 행동이 거칠고 어설프다', distractors: ['곱살스럽다', '든적스럽다', '새삼스럽다', '영절스럽다'] }
+      ],
+      5: [
+        { w: '도두보다', passages: ['그는 가만히 고개를 세워 앞을 ( ).', '문제를 해결하기 위해 멀리 ( ) 전망했다.', '상대방의 위치를 확인하려 고개를 ( ).'], def: '고개를 들어 우러러보거나 멀리 바라보다', distractors: ['바루다', '안절부절못하다', '조아리다', '곱씹다'] },
+        { w: '곱씹다', passages: ['지나간 선배의 조언을 가슴속으로 몇 번이나 ( ).', '그날 실패했던 이유를 하나하나 ( ) 보았다.', '그는 그녀가 남긴 마지막 한마디를 계속 ( ).'], def: '뜻을 자꾸 되새겨 생각하다', distractors: ['가무르다', '능갈치다', '무지르다', '욱대기다'] },
+        { w: '나부끼다', passages: ['바람결에 ( ) 나뭇잎들이 춤을 추듯 흔들렸다.', '깃발이 찬 바람에 드높이 ( ) 있었다.', '그녀의 긴 머리카락이 언덕 위에서 ( ).'], def: '바람에 날리어 멋있게 흔들리다', distractors: ['갈마들다', '걷고트다', '마무르다', '버르집다'] },
+        { w: '들쓰다', passages: ['서방님은 이불을 머리 끝까지 ( ) 앓았다.', '먼지를 온몸에 ( ) 현장에서 나왔다.', '억울하게 누명을 ( ) 곤욕을 치렀다.'], def: '물건이나 덮개를 머리나 온몸에 덮어 쓰다', distractors: ['감돌다', '낫잡다', '내박치다', '되뇌다'] }
+      ],
+      6: [
+        { w: '궁싯거리다', passages: ['잠이 오지 않아 밤새 이리저리 ( ).', '어떻게 대답해야 할지 몰라 한참을 ( ).', '결정을 내리지 못하고 마음속으로만 ( ).'], def: '몸을 이리저리 뒤척이거나 마지못해 행동하다', distractors: ['나부대다', '니글거리다', '벋나다', '벼르다'] },
+        { w: '사무치다', passages: ['가슴속 깊이 ( ) 슬픔을 차마 말로 표현하지 못했다.', '뼈에 ( ) 한을 품고 세월을 견뎌냈다.', '그의 차가운 눈빛이 내 마음속까지 ( ).'], def: '깊이 느껴 가슴 깊숙이 새겨지다', distractors: ['더치다', '앵돌아지다', '이울다', '왜장치다'] },
+        { w: '재우치다', passages: ['시간이 얼마 남지 않아 그는 걸음을 ( ).', '상대방의 답을 얻기 위해 질문을 ( ).', '작업의 완성을 위해 사수를 ( ).'], def: '일이나 행동을 빠르게 촉구하거나 다그치다', distractors: ['굽실하다', '시부렁거리다', '알겨먹다', '얼버무르다'] }
+      ],
+      7: [
+        { w: '강단', passages: ['어려운 상황에서도 자신감을 잃지 않는 그분의 ( )이/가 돋보였다.', '그녀는 외유내강형이라 속으로 대단한 ( )을/를 품고 있다.', '위기의 순간에 대범한 ( )을/를 발휘하여 사태를 수습했다.'], def: '어려움에 굴하지 아니하고 견디어 내는 기운', distractors: ['격의', '구가', '굴지', '기치'] },
+        { w: '격의', passages: ['오랜 친구 사이라 아무런 ( ) 없이 대화를 나누었다.', '서로 간에 ( )를 허물고 진솔하게 이야기를 시작했다.', '( ) 없는 소통을 통해 문제를 해결해 나갔다.'], def: '서로 터놓지 않는 어색한 마음이나 거리감', distractors: ['강단', '구가', '굴지', '기치'] },
+        { w: '단장', passages: ['자식을 먼저 보낸 어머니의 가슴은 ( )의 아픔이었다.', '그것은 참으로 ( )의 슬픔을 자아내는 광경이었다.', '( )의 고통을 딛고 비장하게 일어섰다.'], def: '창자가 끊어지는 듯한 극심한 슬픔', distractors: ['도탄', '눌변', '기탄', '나타'] },
+        { w: '발호', passages: ['사회의 혼란을 틈타 부패 세력이 ( )하기 시작했다.', '범죄 세력이 ( )하지 못하도록 공권력을 강화했다.', '독재 정권하에서 불법 조직들의 ( )이/가 극에 달했다.'], def: '세력이나 악한 기운이 자라서 날뜀', distractors: ['소추', '귀결', '함양', '술회'] }
+      ],
+      8: [
+        { w: '각각', passages: ['각자의 역할에 맞게 ( ) 책임을 다해야 한다.', '손님들에게 ( ) 선물을 하나씩 나누어 주었다.', '문제의 원인은 사람마다 ( ) 다를 수 있다.'], def: '사람이나 사물마다 사람마다 따로따로', distractors: ['갹출', '나포', '규합', '도취'] },
+        { w: '갹출', passages: ['동창회 기금을 마련하기 위해 회원들이 조금씩 돈을 ( )했다.', '비용을 각자 ( )하여 식사 자리를 마련했다.', '어려운 이웃을 돕고자 성금을 ( )하였다.'], def: '어떤 목적을 위하여 돈을 나누어 냄', distractors: ['각광', '개가', '고루', '관철'] },
+        { w: '묘연', passages: ['피의자는 이미 잠적을 하여 현재 행방이 ( )하다.', '연락이 끊긴 뒤 그의 소식은 ( )한 상태이다.', '사건의 결정적 단서가 여전히 ( )하기만 하다.'], def: '아득하여 눈에 보이지 않거나 소식이 없다', distractors: ['맹아', '방불', '비등', '비화'] }
+      ],
+      9: [
+        { w: '불야성', passages: ['네온사인으로 화려하게 빛나는 거리는 밤늦도록 ( )을/를 이루었다.', '잠들지 않는 도시의 중심가는 언제나 ( )이었다.', '축제 현장은 밤새도록 화려한 ( )을/를 자랑했다.'], def: '밤에도 불빛이 번화하여 낮처럼 밝은 곳', distractors: ['백일몽', '복마전', '분수령', '장광설'] },
+        { w: '유복자', passages: ['아버지가 돌아가신 후 태어난 ( )로서 어머니의 사랑을 받았다.', '그는 자라면서 ( )라는 사실에 깊은 외로움을 느꼈다.', '어머니는 귀한 ( )를 키우느라 평생 고생하셨다.'], def: '태어나기 전에 아버지를 여읜 자식', distractors: ['기린아', '호남아', '풍운아', '선각자'] }
+      ],
+      10: [
+        { w: '도화선', passages: ['사라예보 암살 사건은 제1차 세계 대전의 ( )(이)가 되었다.', '작은 말다툼이 커다란 분쟁의 ( )(이)가 되어 사태가 커졌다.', '작은 갈등 사건이 대규모 시위의 ( )(이)가 되어 피어올랐다.'], def: '사건이 일어나게 된 결정적 계기', distractors: ['철옹성', '일당백', '공염불', '초석'] },
+        { w: '일당백', passages: ['그 특수부대원들은 그야말로 ( )의 정예 요원들이었다.', '혼자서 백 명을 당해낼 만큼 ( )의 용맹을 보였다.', '실력파 전문가들로 구성되어 ( )의 역량을 자랑한다.'], def: '한 사람이 백 사람을 당해냄', distractors: ['철옹성', '공염불', '기대주', '소인배'] },
+        { w: '공염불', passages: ['실행이 동반되지 않는 허황된 말은 ( )에 불과하다.', '주민들을 위한 약속이 헛된 ( )로 끝나서는 안 된다.', '아무리 거창한 구호라도 실천이 없으면 ( )(이)다.'], def: '실속 없이 입으로만 외우는 헛된 말', distractors: ['도화선', '일당백', '철옹성', '초석'] }
+      ],
+      11: [
+        { w: '각축', passages: ['두 명의 영웅이 천하의 패권을 다투며 치열하게 ( )을/를 벌였다.', '세계 시장 선점을 위한 글로벌 기업들의 ( )이/가 심화되었다.', '우승컵을 두고 두 팀이 팽팽한 ( )을/를 계속하고 있다.'], def: '서로 이기려고 맞서 다툼', distractors: ['간헐', '견지', '경위', '구명'] },
+        { w: '구사', passages: ['그는 유창한 외국어를 자유자재로 ( )하며 좌중을 놀라게 했다.', '고난도의 기술을 다채롭게 ( )하는 능력이 탁월하다.', '적절한 비유법을 ( )하여 설득력을 높였다.'], def: '마음대로 부리어 사용함', distractors: ['기저', '난마', '남발', '내핍'] }
+      ],
+      12: [
+        { w: '경종', passages: ['이번 안전사고는 사회 전체에 커다란 ( )을/를 울렸다.', '환경 파괴의 위험성에 대해 학계가 ( )을/를 가판했다.', '방심하고 있던 우리에게 깊은 ( )을/를 준 계기였다.'], def: '경계하고 깨우치기 위하여 주는 충고', distractors: ['갈파', '고무', '규명', '난무'] },
+        { w: '남획', passages: ['무분별한 어류의 ( )으로 인해 수산 자원이 고갈되고 있다.', '야생 동물의 ( )을/를 금지하는 법안이 제정되었다.', '환경 보존을 위해 무차별적인 ( )을/를 막아야 한다.'], def: '짐승이나 물고기를 마구 잡음', distractors: ['답보', '말소', '목도', '사료'] }
+      ],
+      13: [
+        { w: '긴박감', passages: ['손에 땀을 쥐게 하는 ( ) 넘치는 영화 장면이었다.', '사태가 빠르게 전개되면서 현장의 ( )이/가 높아졌다.', '경기가 막판에 접어들며 최고의 ( )을/를 선사했다.'], def: '다급하고 박두한 느낌', distractors: ['압박감', '초조감', '위압감', '자신감'] },
+        { w: '위화감', passages: ['계층 간의 ( )을/를 줄이기 위한 복지 정책이 요구된다.', '어색한 분위기 속에서 오는 ( )을/를 없애려 노력했다.', '화려한 장식들이 시골 마을과 약간의 ( )을/를 조성했다.'], def: '조화되지 아니하고 겉도는 느낌', distractors: ['모멸감', '무력감', '안도감', '절망감'] }
+      ],
+      14: [
+        { w: '역정', passages: ['아들은 화가 나서 부모님께 버럭 ( )을/를 냈다.', '사소한 일에 괜히 ( )을/를 내어 주변을 당황하게 했다.', '자신의 잘못이 드러나자 오히려 ( )을/를 내며 성을 냈다.'], def: '몹시 짠 성이나 화', distractors: ['언질', '역린', '유린', '일갈'] },
+        { w: '자행', passages: ['권력을 악용하여 온갖 불법 행위를 ( )하였다.', '타인의 인권을 침해하는 무도한 행위를 ( )했다.', '공공장소에서 소란을 ( )하는 자를 엄벌에 처했다.'], def: '제멋대로 제구실 없이 행동함', distractors: ['영전', '와중', '일환', '경지'] }
+      ],
+      15: [
+        { w: '가식', passages: ['허위와 ( )을/를 벗어던지고 진실되게 행동해라.', '그의 친절한 태도는 모두 계산된 ( )에 불과했다.', '( ) 없는 솔직한 모습이 사람들의 마음을 움직였다.'], def: '말이나 행동을 허위로 꾸밈', distractors: ['가관', '가교', '가책', '간과'] },
+        { w: '가책', passages: ['양심의 ( )을/를 느껴 밤새 잠을 이루지 못했다.', '잘못을 저지른 후 스스로 깊은 ( )에 빠졌다.', '자신의 이기적인 행동에 대해 ( )을/를 받았다.'], def: '자기의 잘못에 대하여 자책하고 괴로워함', distractors: ['가관', '가교', '가식', '간과'] }
+      ],
+      16: [
+        { w: '궤변', passages: ['상대방은 말도 안 되는 ( )을/를 늘어놓으며 변명했다.', '자신의 잘못을 덮기 위해 허황된 ( )을/를 주장했다.', '논리에 맞지 않는 ( )에 모두가 고개를 내저었다.'], def: '이치에 맞지 않는 말을 억지로 끌어대어 정당한 것처럼 꾸미는 말', distractors: ['귀감', '귀결', '귀의', '긍휼'] },
+        { w: '귀감', passages: ['그의 훌륭한 품성과 행실은 모두에게 ( )이/가 되었다.', '지역 사회의 귀중한 ( )(으)로 삼아야 할 귀한 덕목이다.', '어려움을 극복한 그의 일화는 청소년들의 ( )(이)다.'], def: '거울로 삼아 본받을 만한 모범', distractors: ['궤변', '귀결', '귀의', '긍휼'] }
+      ],
+      17: [
+        { w: '저의', passages: ['그가 갑자기 호의를 베푸는 숨은 ( )가 무엇인지 궁금했다.', '상대방의 순수하지 못한 ( )를/를 간파하고 경계했다.', '질문의 진짜 ( )를/를 파악하지 못해 당황했다.'], def: '속에 담겨 있는 진짜 뜻이나 의도', distractors: ['저력', '저해', '전가', '전위'] },
+        { w: '조예', passages: ['선생님은 고전 음악 분야에 깊은 ( )(이)가 있으시다.', '미술에 관한 그의 깊은 ( )(은)는 감상평에서 드러난다.', '전문가 못지않은 학문적 ( )(을)를 자랑한다.'], def: '학문이나 예술 분야의 깊은 지식', distractors: ['기치', '단장', '눌변', '나타'] }
+      ],
+      18: [
+        { w: '추호', passages: ['나는 그 일을 진행하는 데 있어 ( )의 거짓도 없다.', '그의 진실성에 대해서는 ( )의 의심도 들지 않았다.', '자신의 행동에 대해 ( )의 후회도 없다고 말했다.'], def: '지극히 적거나 작은 분량', distractors: ['추파', '치부', '칩거', '쾌차'] },
+        { w: '풍상', passages: ['세상의 온갖 ( )을/를 다 겪어낸 노인의 깊은 눈빛.', '거친 모진 ( )을/를 견디며 고향을 지켜온 나무.', '인생의 갖은 ( )을/를 이겨내고 성공을 이루었다.'], def: '바람과 서리 또는 세상의 온갖 시련과 고난', distractors: ['편력', '폄훼', '풍미', '풍조'] }
+      ],
+      19: [
+        { w: '만연', passages: ['사회 전체에 안전불감증이 ( )해 있어 위험하다.', '부정부패가 사방에 ( )하여 사회적 신뢰가 무너졌다.', '향락 풍조가 도시 전체로 ( )하기 시작했다.'], def: '나쁜 현상이나 기운이 널리 퍼짐', distractors: ['도태', '독직', '만류', '매개'] },
+        { w: '알선', passages: ['직업소개소는 구직자들에게 일자리를 ( )해 주는 곳이다.', '양측의 오해를 풀기 위해 주위에서 중재를 ( )했다.', '좋은 조건의 계약을 ( )해 준 덕분에 성공했다.'], def: '남의 일이 잘되도록 중간에서 소개해 줌', distractors: ['술회', '슬하', '안일', '안착'] }
+      ],
+      20: [
+        { w: '염세', passages: ['절망적인 상황이 지속되자 그만 ( )주의에 빠지고 말았다.', '삶의 의미를 잃고 ( )적인 태도로 세상을 바라보았다.', '그 시인은 고독과 ( )를 노래하는 시를 많이 썼다.'], def: '세상을 덧없고 부정적으로 바라봄', distractors: ['어용', '영달', '열반', '영수'] },
+        { w: '척결', passages: ['사회의 부정부패를 완전히 ( )하기 위해 노력하자.', '공직 사회의 부조리를 ( )하는 칼을 빼 들었다.', '악습과 비리를 ( )하여 바른 사회를 세우자.'], def: '나쁜 요소나 적폐를 깨끗이 파헤쳐 없앰', distractors: ['질타', '착복', '착안', '참설'] }
+      ],
+      21: [
+        { w: '가슴을 졸이다', passages: ['합격 발표 순간까지 온 가족이 ( ) 기다렸다.', '경기 막판 한 점 차 상황에서 시청자들은 ( ) 시청했다.', '결과가 어떻게 나올지 너무 긴장되어 ( ) 있었다.'], def: '마음속으로 몹시 걱정하거나 긴장하다', distractors: ['손을 놓다', '배를 채우다', '기를 펴다', '발을 구르다'] },
+        { w: '귀를 의심하다', passages: ['내가 1등이라는 믿기 힘든 소식에 내 ( ).', '그렇게 소심하던 친구가 큰소리를 치자 듣고 있던 모두가 ( ).', '상대방의 너무나 당돌한 제안에 순간 내 ( ).'], def: '너무 뜻밖이어서 들은 사실이 믿어지지 않다', distractors: ['귀가 가렵다', '귀에 익다', '귀를 기울이다', '귀가 얇다'] },
+        { w: '손을 놓다', passages: ['일이 너무 과중하여 결국 중간에 ( ) 말았다.', '희망이 보이지 않자 팀원 전체가 ( ) 쉬고 있었다.', '아무리 힘들어도 결코 ( ) 포기해서는 안 된다.'], def: '하던 일을 그만두거나 수수방관하다', distractors: ['가슴을 졸이다', '발을 벗다', '어깨를 겨누다', '이를 악물다'] },
+        { w: '발을 벗다', passages: ['어려움에 처한 이웃을 돕기 위해 온 동네 주민들이 ( ) 나섰다.', '자기 일처럼 ( ) 적극적으로 지원해 주었다.', '사고 수습을 위하여 유가족과 시민들이 ( ) 도왔다.'], def: '자발적으로 적극적으로 나서다', distractors: ['손을 놓다', '귀를 막다', '눈을 감다', '등을 돌리다'] }
+      ],
+      22: [
+        { w: '어깨가 처지다', passages: ['계속된 실패에 그는 ( ) 우울한 표정으로 걸어갔다.', '낙방 소식을 듣고는 깊은 한숨을 쉬며 ( ).', '아무도 응원해주지 않자 그만 ( ) 말았다.'], def: '낙담하거나 실의에 빠져 기운이 없다', distractors: ['어깨가 가볍다', '어깨를 으쓱거리다', '어깨를 나란히 하다', '어깨를 짓누르다'] },
+        { w: '얼굴이 두껍다', passages: ['그렇게 큰 잘못을 저지르고도 ( ) 행동하는 사람이다.', '자신의 실수를 인정하지 않고 ( ) 능청을 떨었다.', '어쩜 저렇게 ( ) 뻔뻔할 수 있는지 모르겠다.'], def: '부끄러움을 모르고 매우 뻔뻔하다', distractors: ['얼굴을 내밀다', '얼굴에 씌어 있다', '얼굴을 들다', '얼굴만 쳐다보다'] }
+      ],
+      23: [
+        { w: '임자', passages: ['너처럼 안하무인으로 행동하다간 드디어 ( )를 만날 것이다.', '강한 인내심과 실력을 갖춘 진짜 ( )가 나타났다.', '이번 겨루기에서 과연 그의 ( )는 누구일지 기대된다.'], def: '어떤 물건이나 사람의 마땅한 상대나 임자', distractors: ['바람', '입술', '찬물', '화촉'] },
+        { w: '시치미', passages: ['자기가 다 먹어놓고는 모르는 척 ( )를 뗐다.', '거짓말이 드러났는데도 끝까지 ( )를 떼고 있었다.', '뻔히 다 아는 사실인데 ( )를 떼면 어떡하니?'], def: '자기가 한 일을 하지 아니한 체하는 태도', distractors: ['꽁무니', '마른침', '바가지', '생사람'] }
+      ],
+      24: [
+        { w: '귀가 여리다', passages: ['그는 ( ) 남들이 하는 거짓말에도 쉽게 속아 넘어간다.', '성격이 순하고 ( ) 남의 부탁을 거절하지 못한다.', '남의 말에 흔들리지 마라, 너무 ( )탈이다.'], def: '남의 말을 쉽게 믿고 마음이 잘 흔들리다', distractors: ['귀가 뚫리다', '귀가 가렵다', '귀가 따갑다', '귀에 들어가다'] },
+        { w: '눈이 높다', passages: ['그녀는 어지간한 상대를 마음에 차 하지 않을 정도로 ( ).', '보는 안목과 요구 기준이 워낙 ( ) 마음에 드는 것이 없었다.', '작품을 고르는 ( ) 덕분에 좋은 수집품을 모았다.'], def: '보는 수준이나 선택 기준이 매우 높다', distractors: ['눈에 띄다', '눈에 익다', '눈이 맞다', '눈이 삐다'] }
+      ],
+      25: [
+        { w: '김이 식다', passages: ['열심히 준비했던 시험이 갑자기 연기되자 그만 ( ).', '승리를 확신하다가 역전을 당하니 분위기가 ( ).', '신나게 추진하던 계획이 취소되어 맥이 풀리고 ( ).'], def: '의욕이나 흥미가 갑자기 싹 사라지다', distractors: ['구미가 당기다', '이가 빠지다', '치가 떨리다', '이를 악물다'] },
+        { w: '복장이 터지다', passages: ['한창 바쁜데도 느릿느릿 여유를 부리는 모습을 보니 ( ).', '아무리 말해도 알아듣지 못하니 답답해서 ( ).', '상대방의 무성의한 태도에 가슴이 답답하고 ( ).'], def: '가슴이 꽉 막힐 듯이 매우 답답하다', distractors: ['날개가 돋치다', '덜미가 잡히다', '등골이 빠지다', '배알이 꼴리다'] }
+      ],
+      26: [
+        { w: '포문을 열다', passages: ['상대 후보의 논리를 공격하기 위해 회의 초반부터 ( ).', '기자회견이 시작되자 공격적인 질문으로 ( ).', '학술 토론회에서 비판적인 의견으로 ( ).'], def: '어떤 논쟁이나 사업 따위를 기세 좋게 시작하다', distractors: ['가면을 벗다', '간장을 태우다', '난탕을 치다', '허리를 굽히다'] },
+        { w: '활개를 치다', passages: ['불법 조직들과 부조리가 사회 구석구석에서 ( ).', '공권력이 약해지자 범죄자들이 길거리에서 ( ).', '기승을 부리며 사기꾼들이 온 동네에서 ( ).'], def: '남을 의식하지 않고 기세 좋게 마구 행동하다', distractors: ['게걸음을 치다', '철퇴를 가하다', '출사표를 던지다', '마각을 드러내다'] }
+      ],
+      27: [
+        { w: '지양하다', passages: ['소모적인 논쟁은 ( ) 서로 협력하는 태도를 가지자.', '감정적인 대립을 ( ) 이성적인 대화로 해결하자.', '지나친 개인주의를 ( ) 공공의 이익을 추구해야 한다.'], def: '더 높은 단계를 위해 피하거나 하지 않다', distractors: ['지향하다', '추구하다', '조장하다', '열중하다'] },
+        { w: '소추', passages: ['국회는 대통령에 대한 탄핵 ( )안을 의결하였다.', '검찰이 범죄 피의자를 형사 ( )하기로 결정했다.', '공직자의 불법 행위에 대해 탄핵 ( )권이 발동되었다.'], def: '형사 재판 요구 또는 탄핵 발의', distractors: ['구축', '지양', '최고', '소요'] },
+        { w: '초석', passages: ['이번 협정 체결은 양국 간 평화의 ( )이/가 될 것이다.', '학문의 기초를 다지는 ( )을/를 마련했다.', '국가 발전의 단단한 ( )을/를 쌓아 올렸다.'], def: '어떤 일의 기틀이 되는 바탕', distractors: ['도화선', '철옹성', '맹아', '전조'] },
+        { w: '최고', passages: ['채권자는 채무자에게 채무 이행을 촉구하는 ( )장을 보냈다.', '법적 절차에 따라 정해진 기한 내에 ( )를 진행했다.', '이행하지 않을 경우 법적 상응 조치를 취하겠다는 ( )를 했다.'], def: '상대방에게 일정한 행위를 하도록 촉구함', distractors: ['소추', '지양', '구축', '맹아'] }
+      ],
+      28: [
+        { w: '경각심', passages: ['안전사고 예방을 위해 모두가 ( )을/를 고취해야 한다.', '음주 운전의 위험성에 대한 ( )을/를 높이기 위한 캠페인을 실시했다.', '방심이 가져올 위험을 상기하며 ( )을/를 가지도록 하자.'], def: '경계하고 깨어있는 마음', distractors: ['노파심', '허영심', '공명심', '의타심'] },
+        { w: '도화선', passages: ['사라예보 암살 사건은 제1차 세계 대전의 ( )(이)가 되었다.', '작은 말다툼이 커다란 분쟁의 ( )(이)가 되어 사태가 커졌다.', '작은 갈등 사건이 대규모 시위의 ( )(이)가 되어 피어올랐다.'], def: '사건이 일어나게 된 결정적 계기', distractors: ['철옹성', '일당백', '공염불', '초석'] },
+        { w: '일당백', passages: ['그 특수부대원들은 그야말로 ( )의 정예 요원들이었다.', '혼자서 백 명을 당해낼 만큼 ( )의 용맹을 보였다.', '실력파 전문가들로 구성되어 ( )의 역량을 자랑한다.'], def: '한 사람이 백 사람을 당해냄', distractors: ['철옹성', '공염불', '기대주', '소인배'] },
+        { w: '공염불', passages: ['실행이 동반되지 않는 허황된 말은 ( )에 불과하다.', '주민들을 위한 약속이 헛된 ( )로 끝나서는 안 된다.', '아무리 거창한 구호라도 실천이 없으면 ( )(이)다.'], def: '실속 없이 입으로만 외우는 헛된 말', distractors: ['도화선', '일당백', '철옹성', '초석'] }
+      ],
+      29: [
+        { w: '구가', passages: ['그 문명은 당대 세계에서 가장 찬란한 황금기를 ( )하였다.', '그 예술가는 시대를 앞서가며 대중의 환호를 ( )했다.', '혁신적인 기술 개발로 연일 전성기를 ( )하고 있다.'], def: '기쁜 상황이나 전성기를 마음껏 누림', distractors: ['차치', '발호', '귀결', '소추'] },
+        { w: '발호', passages: ['독재 정권하에서 불법 조직들의 ( )이/가 극에 달했다.', '범죄 세력이 ( )하지 못하도록 공권력을 강화했다.', '사회의 혼란을 틈타 부패 세력이 ( )하기 시작했다.'], def: '세력이나 악한 기운이 자라서 날뜀', distractors: ['소추', '귀결', '함양', '술회'] },
+        { w: '귀결', passages: ['철저한 추진력 부족이 가져온 비극적 ( )(이)었다.', '장시간의 토론은 합리적인 결론으로 ( )되었다.', '모든 문제는 도덕성의 부재라는 원인으로 ( )한다.'], def: '논의나 결과가 마지막 결론에 도달함', distractors: ['도화선', '초석', '맹아', '전조'] },
+        { w: '차치', passages: ['그 문제의 잘잘못은 ( )하고 당장 대책부터 세우자.', '개인의 감정은 ( )하더라도 조직의 규율은 지켜야 한다.', '지나간 일은 ( )하고 미래를 도모합봅시다.'], def: '어떤 대상을 일단 내버려 두고 다루지 않음', distractors: ['구가', '발호', '귀결', '소추'] }
+      ],
+      30: [
+        { w: '조예', passages: ['선생님은 고전 음악 분야에 깊은 ( )(이)가 있으시다.', '미술에 관한 그의 깊은 ( )(은)는 감상평에서 드러난다.', '전문가 못지않은 학문적 ( )(을)를 자랑한다.'], def: '학문이나 예술 분야의 깊은 지식', distractors: ['기치', '단장', '눌변', '나타'] },
+        { w: '혜안', passages: ['미래를 내다보는 지도자의 ( )(이)가 절실하다.', '그의 ( ) 덕분에 위기를 슬기롭게 극복할 수 있었다.', '역사를 통찰하는 학자의 ( )(이)가 빛났다.'], def: '사물을 지혜롭게 내다보는 통찰력', distractors: ['눌변', '나타', '기치', '단장'] },
+        { w: '기치', passages: ['민주화와 개혁의 ( ) 아래 시민들이 한데 뭉쳤다.', '혁신이라는 ( )를 내걸고 조직 개편에 착수했다.', '새로운 가치를 추구하는 ( )를 높이 들었다.'], def: '어떤 목적을 위하여 내세우는 태도나 슬로건', distractors: ['조예', '혜안', '나타', '눌변'] },
+        { w: '눌변', passages: ['화려한 달변보다 소박하고 진실된 ( )이/가 감동을 준다.', '그는 자칭 ( )이었으나 논리는 대단히 정연했다.', '말씨는 비록 ( )이지만 진심이 담겨 있었다.'], def: '더듬거리는 서툰 말씨', distractors: ['혜안', '조예', '기치', '단장'] }
+      ],
+      31: [
+        { w: '완치', passages: ['암 초기 진단 덕분에 수술 후 완벽하게 ( )되었다.', '지속적인 재활 치료 끝에 부상에서 ( ) 판정을 받았다.', '꾸준한 병원 치료와 건강 관리로 만성 질환이 ( )되었다.'], def: '병을 완전히 고침', distractors: ['발병', '악화', '재발', '지연'] },
+        { w: '상전벽해', passages: ['세월이 흘러 ( )의 변화를 직접 체감하였다.', '황무지였던 곳이 첨단 도시로 탈바꿈했으니 ( )(이)다.', '작은 시골 마을의 놀라운 발전은 ( )의 변화였다.'], def: '뽕나무 밭이 푸른 바다로 바뀜 (세상의 엄청난 변화)', distractors: ['새옹지마', '설상가상', '안빈낙도', '전화위복'] },
+        { w: '사필귀정', passages: ['온갖 방해에도 불구하고 진실이 밝혀지니 참으로 ( )(이)다.', '억울한 누명이 마침내 벗겨졌으니 ( )(이)라 할 만하다.', '악행을 저지른 자가 처벌받는 것은 ( )의 이치다.'], def: '모든 일은 결국 올바르게 귀결됨', distractors: ['오리무중', '견강부회', '가렴주구', '고식지계'] },
+        { w: '새옹지마', passages: ['인생 만사는 ( )(이)니 실패에 너무 낙담할 필요 없다.', '오늘의 불운이 내일의 행운이 될 수 있으니 참으로 ( )(이)다.', '세상일은 알 수 없다는 것이 ( )의 고사다.'], def: '인생의 길흉화복은 변수가 많아 예측하기 어려움', distractors: ['상전벽해', '사필귀정', '설상가상', '안빈낙도'] }
+      ]
+    };
+
+    const SCHEDULE_PLAN = [
+      { day: 1, unit: 'Ⅰ 단원', unitTitle: '어휘의 사전적 의미', subTitle: '고유어', range: 'p.002~p.023', count: 28 },
+      { day: 2, unit: 'Ⅰ 단원', unitTitle: '어휘의 사전적 의미', subTitle: '한자어', range: 'p.024~p.035', count: 22 },
+      { day: 3, unit: 'Ⅰ 단원', unitTitle: '어휘의 사전적 의미', subTitle: '고유어·한자어 대응', range: 'p.036~p.047', count: 21 },
+      { day: 4, unit: 'Ⅰ 단원', unitTitle: '어휘의 사전적 의미', subTitle: '어휘 확장 1', range: 'p.048~p.063', count: 32 },
+      { day: 5, unit: 'Ⅰ 단원', unitTitle: '어휘의 사전적 의미', subTitle: '어휘 확장 2', range: 'p.064~p.075', count: 17 },
+      { day: 6, unit: 'Ⅰ 단원', unitTitle: '어휘의 사전적 의미', subTitle: '어휘 심화 1', range: 'p.076~p.093', count: 26 },
+      { day: 7, unit: 'Ⅰ 단원', unitTitle: '어휘의 사전적 의미', subTitle: '어휘 심화 2', range: 'p.094~p.113', count: 27 },
+      { day: 8, unit: 'Ⅰ 단원', unitTitle: '어휘의 사전적 의미', subTitle: '어휘 심화 3', range: 'p.114~p.135', count: 29 },
+      { day: 9, unit: 'Ⅰ 단원', unitTitle: '어휘의 사전적 의미', subTitle: '어휘 종합 1', range: 'p.136~p.147', count: 22 },
+      { day: 10, unit: 'Ⅰ 단원', unitTitle: '어휘의 사전적 의미', subTitle: '어휘 종합 2', range: 'p.148~p.157', count: 18 },
+      { day: 11, unit: 'Ⅰ 단원', unitTitle: '어휘의 사전적 의미', subTitle: '어휘 종합 3', range: 'p.158~p.169', count: 27 },
+      { day: 12, unit: 'Ⅰ 단원', unitTitle: '어휘의 사전적 의미', subTitle: '어휘 종합 4', range: 'p.170~p.179', count: 22 },
+      { day: 13, unit: 'Ⅰ 단원', unitTitle: '어휘의 사전적 의미', subTitle: '어휘 종합 5', range: 'p.180~p.191', count: 24 },
+      { day: 14, unit: 'Ⅰ 단원', unitTitle: '어휘의 사전적 의미', subTitle: '실전 테스트 1', range: 'p.192~p.199', count: 20 },
+      { day: 15, unit: 'Ⅰ 단원', unitTitle: '어휘의 사전적 의미', subTitle: '실전 테스트 2', range: 'p.200~p.211', count: 16 },
+
+      { day: 16, unit: 'Ⅱ 단원', unitTitle: '어휘의 관계별 의미', subTitle: '유의 관계', range: 'p.212~p.229', count: 25 },
+      { day: 17, unit: 'Ⅱ 단원', unitTitle: '어휘의 관계별 의미', subTitle: '반의 관계', range: 'p.230~p.251', count: 29 },
+      { day: 18, unit: 'Ⅱ 단원', unitTitle: '어휘의 관계별 의미', subTitle: '상하 관계', range: 'p.252~p.267', count: 20 },
+      { day: 19, unit: 'Ⅱ 단원', unitTitle: '어휘의 관계별 의미', subTitle: '동음이의어·다의어', range: 'p.268~p.283', count: 25 },
+      { day: 20, unit: 'Ⅱ 단원', unitTitle: '어휘의 관계별 의미', subTitle: '한자 관계 및 종합', range: 'p.284~p.301', count: 36 },
+
+      { day: 21, unit: 'Ⅲ 단원', unitTitle: '어휘의 관용적 의미', subTitle: '관용어 1', range: 'p.302~p.317', count: 22 },
+      { day: 22, unit: 'Ⅲ 단원', unitTitle: '어휘의 관용적 의미', subTitle: '관용어 2', range: 'p.318~p.329', count: 23 },
+      { day: 23, unit: 'Ⅲ 단원', unitTitle: '어휘의 관용적 의미', subTitle: '속담 1', range: 'p.330~p.343', count: 21 },
+      { day: 24, unit: 'Ⅲ 단원', unitTitle: '어휘의 관용적 의미', subTitle: '속담 2', range: 'p.344~p.367', count: 24 },
+      { day: 25, unit: 'Ⅲ 단원', unitTitle: '어휘의 관용적 의미', subTitle: '한자성어 1', range: 'p.368~p.379', count: 17 },
+      { day: 26, unit: 'Ⅲ 단원', unitTitle: '어휘의 관용적 의미', subTitle: '한자성어 2', range: 'p.380~p.395', count: 32 },
+
+      { day: 27, unit: 'Ⅳ 단원', unitTitle: '어휘의 정확한 사용', subTitle: '어문 규정', range: 'p.396~p.407', count: 24 },
+      { day: 28, unit: 'Ⅳ 단원', unitTitle: '어휘의 정확한 사용', subTitle: '표기 유의 어휘', range: 'p.408~p.419', count: 19 },
+      { day: 29, unit: 'Ⅳ 단원', unitTitle: '어휘의 정확한 사용', subTitle: '혼동하기 쉬운 어휘', range: 'p.420~p.445', count: 45 },
+      { day: 30, unit: 'Ⅳ 단원', unitTitle: '어휘의 정확한 사용', subTitle: '문장 다듬기', range: 'p.446~p.473', count: 43 },
+
+      { day: 31, unit: 'Ⅴ 단원', unitTitle: '새로 생긴 말', subTitle: '신조어 및 시사 어휘', range: 'p.474~p.495', count: 29 }
+    ];
+
+    const UNIT_GROUPS = [
+      { unit: 'Ⅰ 단원', title: '어휘의 사전적 의미', days: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] },
+      { unit: 'Ⅱ 단원', title: '어휘의 관계별 의미', days: [16, 17, 18, 19, 20] },
+      { unit: 'Ⅲ 단원', title: '어휘의 관용적 의미', days: [21, 22, 23, 24, 25, 26] },
+      { unit: 'Ⅳ 단원', title: '어휘의 정확한 사용', days: [27, 28, 29, 30] },
+      { unit: 'Ⅴ 단원', title: '새로 생긴 말', days: [31] }
+    ];
+
+    const shuffleArray = (array) => {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    };
+
+    const createQuestionObj = (item) => {
+      const options = shuffleArray([item.word, ...item.distractors]);
+      return {
+        word: item.word,
+        passage: item.passage,
+        definition: item.definition,
+        options: options,
+        correctAnswer: item.word,
+        day: item.day,
+        unit: item.unit,
+        unitTitle: item.unitTitle,
+        subTitle: item.subTitle
+      };
+    };
+
+    function App() {
+      const [selectedDays, setSelectedDays] = React.useState([1, 2]);
+      const [appState, setAppState] = React.useState('SELECT'); // 'SELECT' | 'QUIZ' | 'REVIEW'
+      const [quizQuestions, setQuizQuestions] = React.useState([]);
+      const [currentIndex, setCurrentIndex] = React.useState(0);
+      const [userAnswers, setUserAnswers] = React.useState([]);
+      const [startTime, setStartTime] = React.useState(null);
+      const [elapsedTime, setElapsedTime] = React.useState(0);
+      const [errorMessage, setErrorMessage] = React.useState('');
+
+      const toggleDay = (dayNum) => {
+        setErrorMessage('');
+        setSelectedDays(prev =>
+          prev.includes(dayNum)
+            ? prev.filter(d => d !== dayNum)
+            : [...prev, dayNum].sort((a, b) => a - b)
+        );
+      };
+
+      const selectUnitDays = (dayList) => {
+        setErrorMessage('');
+        setSelectedDays(prev => {
+          const combined = new Set([...prev, ...dayList]);
+          return Array.from(combined).sort((a, b) => a - b);
+        });
+      };
+
+      const deselectUnitDays = (dayList) => {
+        setErrorMessage('');
+        setSelectedDays(prev => prev.filter(d => !dayList.includes(d)));
+      };
+
+      const selectAllDays = () => {
+        setErrorMessage('');
+        setSelectedDays(SCHEDULE_PLAN.map(p => p.day));
+      };
+
+      const clearAllDays = () => {
+        setErrorMessage('');
+        setSelectedDays([]);
+      };
+
+      const startReviewQuiz = () => {
+        setErrorMessage('');
+
+        if (selectedDays.length === 0) {
+          setErrorMessage('복습할 DAY 범위를 최소 하나 이상 선택해 주세요!');
+          return;
+        }
+
+        // 1. Collect all passage items STRICTLY from selected days
+        const pool = [];
+        selectedDays.forEach(dayNum => {
+          const dayObj = SCHEDULE_PLAN.find(p => p.day === dayNum);
+          const dbItems = DICTIONARY_VOCAB_DB[dayNum] || [];
+
+          dbItems.forEach(item => {
+            const passages = Array.isArray(item.passages) ? item.passages : [item.passage];
+            passages.forEach(pass => {
+              if (pass) {
+                pool.push({
+                  word: item.w,
+                  passage: pass,
+                  definition: item.def,
+                  distractors: item.distractors,
+                  day: dayObj ? dayObj.day : dayNum,
+                  unit: dayObj ? dayObj.unit : '',
+                  unitTitle: dayObj ? dayObj.unitTitle : '',
+                  subTitle: dayObj ? dayObj.subTitle : ''
+                });
+              }
+            });
+          });
+        });
+
+        if (pool.length === 0) {
+          setErrorMessage('선택하신 DAY 범위에 수록된 어휘 데이터가 부족합니다. 다른 DAY를 함께 선택해 주세요.');
+          return;
+        }
+
+        // Group items by unique word
+        const wordToItemsMap = new Map();
+        pool.forEach(item => {
+          if (!wordToItemsMap.has(item.word)) {
+            wordToItemsMap.set(item.word, []);
+          }
+          wordToItemsMap.get(item.word).push(item);
+        });
+
+        const uniqueWords = shuffleArray(Array.from(wordToItemsMap.keys()));
+        const selectedQuestions = [];
+        const usedPassageSet = new Set();
+
+        // Step A: Pick 1 question per unique word
+        uniqueWords.forEach(w => {
+          if (selectedQuestions.length < 30) {
+            const items = wordToItemsMap.get(w);
+            const randomItem = items[Math.floor(Math.random() * items.length)];
+            selectedQuestions.push(randomItem);
+            usedPassageSet.add(randomItem.passage);
+          }
+        });
+
+        // Step B: Fill up to 30 using remaining unused passages STRICTLY from selected range
+        if (selectedQuestions.length < 30) {
+          const remainingPool = shuffleArray(pool.filter(item => !usedPassageSet.has(item.passage)));
+          for (const item of remainingPool) {
+            if (selectedQuestions.length >= 30) break;
+            selectedQuestions.push(item);
+            usedPassageSet.add(item.passage);
+          }
+        }
+
+        // Step C: Fallback Padding - pad by duplicating passage items with newly shuffled options until exactly 30
+        if (selectedQuestions.length < 30) {
+          const fallbackPool = shuffleArray([...pool]);
+          let padIndex = 0;
+          while (selectedQuestions.length < 30 && fallbackPool.length > 0) {
+            const itemToDuplicate = fallbackPool[padIndex % fallbackPool.length];
+            selectedQuestions.push({ ...itemToDuplicate });
+            padIndex++;
+          }
+        }
+
+        // Step D: Shuffle final selected questions
+        const finalQuestions = shuffleArray(selectedQuestions).map(q => createQuestionObj(q));
+
+        setQuizQuestions(finalQuestions);
+        setCurrentIndex(0);
+        setUserAnswers([]);
+        setStartTime(Date.now());
+        setAppState('QUIZ');
+      };
+
+      const handleSelectOption = (chosenOption) => {
+        const currentQ = quizQuestions[currentIndex];
+        const isCorrect = chosenOption === currentQ.correctAnswer;
+
+        const answerRecord = {
+          questionIndex: currentIndex + 1,
+          word: currentQ.word,
+          passage: currentQ.passage,
+          definition: currentQ.definition,
+          chosen: chosenOption,
+          correct: currentQ.correctAnswer,
+          isCorrect: isCorrect,
+          day: currentQ.day,
+          unit: currentQ.unit,
+          unitTitle: currentQ.unitTitle,
+          subTitle: currentQ.subTitle
+        };
+
+        const nextAnswers = [...userAnswers, answerRecord];
+        setUserAnswers(nextAnswers);
+
+        if (currentIndex + 1 < quizQuestions.length) {
+          setCurrentIndex(currentIndex + 1);
+        } else {
+          const totalTime = Math.floor((Date.now() - startTime) / 1000);
+          setElapsedTime(totalTime);
+          setAppState('REVIEW');
+        }
+      };
+
+      if (appState === 'SELECT') {
+        return (
+          <div className="min-h-screen bg-slate-50 text-slate-800 py-8 px-4 font-sans">
+            <div className="max-w-4xl mx-auto">
+              {/* Header */}
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 mb-8">
+                <div className="flex items-center space-x-3 mb-2">
+                  <div className="bg-indigo-600 text-white p-2.5 rounded-xl shadow-md">
+                    <BookOpen className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
+                      국어 1등급 어휘력 복습
+                    </h1>
+                    <p className="text-xs text-indigo-600 font-semibold mt-0.5">
+                      학습계획표 단원별 맞춤 테스트 시스템
+                    </p>
+                  </div>
+                </div>
+                <p className="text-slate-600 mt-3 text-sm md:text-base leading-relaxed">
+                  복습하고자 하는 대단원 및 DAY 범위를 선택하세요.
+                  선택한 범위 내에서 무작위로 <strong>30문항 복습 테스트</strong>가 출제됩니다.
+                </p>
+              </div>
+
+              {/* Inline Error Notification */}
+              {errorMessage && (
+                <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 flex items-center gap-3 text-red-800 text-sm font-medium animate-fadeIn">
+                  <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
+                  <span>{errorMessage}</span>
+                </div>
+              )}
+
+              {/* Range Selection Card */}
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 mb-8">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 mb-6 gap-3">
+                  <div>
+                    <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                      <Layers className="w-5 h-5 text-indigo-600" />
+                      학습 범위 선택 (단원 및 DAY)
+                    </h2>
+                    <p className="text-xs text-slate-500 mt-1">
+                      단원명과 세부 주제를 확인하고 개별 DAY를 복수 선택하세요.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={selectAllDays}
+                      className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors"
+                    >
+                      전체 선택
+                    </button>
+                    <button
+                      onClick={clearAllDays}
+                      className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors"
+                    >
+                      선택 해제
+                    </button>
+                  </div>
+                </div>
+
+                {/* Categorized Unit Sections */}
+                <div className="space-y-8 max-h-[580px] overflow-y-auto pr-1">
+                  {UNIT_GROUPS.map((group) => {
+                    const groupDaysPlan = SCHEDULE_PLAN.filter(p => group.days.includes(p.day));
+                    const allGroupSelected = group.days.every(d => selectedDays.includes(d));
+
+                    return (
+                      <div key={group.unit} className="bg-slate-50/70 p-5 rounded-2xl border border-slate-200/80">
+                        {/* Unit Header */}
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 pb-3 border-b border-slate-200/80 gap-2">
+                          <div className="flex items-center gap-2.5">
+                            <span className="px-2.5 py-1 bg-indigo-600 text-white font-bold text-xs rounded-lg shadow-sm">
+                              {group.unit}
+                            </span>
+                            <h3 className="font-bold text-slate-900 text-base md:text-lg">
+                              {group.title}
+                            </h3>
+                            <span className="text-xs text-slate-400 font-medium">
+                              ({group.days.length}개 DAY)
+                            </span>
+                          </div>
+
+                          <button
+                            onClick={() => allGroupSelected ? deselectUnitDays(group.days) : selectUnitDays(group.days)}
+                            className={`text-xs font-bold px-3 py-1 rounded-lg border transition-colors flex items-center gap-1 self-start sm:self-auto ${
+                              allGroupSelected
+                                ? 'bg-slate-200 text-slate-700 border-slate-300 hover:bg-slate-300'
+                                : 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100'
+                            }`}
+                          >
+                            <Filter className="w-3 h-3" />
+                            {allGroupSelected ? '단원 해제' : '단원 전체 선택'}
+                          </button>
+                        </div>
+
+                        {/* Days Grid within Unit */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                          {groupDaysPlan.map((item) => {
+                            const isSelected = selectedDays.includes(item.day);
+                            return (
+                              <div
+                                key={item.day}
+                                onClick={() => toggleDay(item.day)}
+                                className={`cursor-pointer p-4 rounded-xl border transition-all duration-200 flex items-center justify-between ${
+                                  isSelected
+                                    ? 'bg-white border-indigo-500 shadow-md ring-2 ring-indigo-500/20 text-indigo-950'
+                                    : 'bg-white border-slate-200 hover:border-slate-300 text-slate-700 hover:bg-slate-50'
+                                }`}
+                              >
+                                <div className="pr-2">
+                                  <div className="flex items-center space-x-2 mb-1">
+                                    <span className={`text-sm font-black ${isSelected ? 'text-indigo-600' : 'text-slate-800'}`}>
+                                      DAY {item.day}
+                                    </span>
+                                    <span className="text-xs font-semibold px-2 py-0.5 bg-slate-100 text-slate-600 rounded">
+                                      {item.subTitle}
+                                    </span>
+                                  </div>
+                                  <div className="text-xs text-slate-500 flex items-center gap-2">
+                                    <span>범위: <strong className="text-slate-700 font-medium">{item.range}</strong></span>
+                                    <span>•</span>
+                                    <span>{item.count}문항</span>
+                                  </div>
+                                </div>
+
+                                <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors flex-shrink-0 ${
+                                  isSelected ? 'bg-indigo-600 text-white' : 'border border-slate-300'
+                                }`}>
+                                  {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Selection Summary & Start */}
+                <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4">
+                  <div className="text-sm text-slate-600 text-center md:text-left">
+                    선택된 DAY: <span className="font-extrabold text-indigo-600">{selectedDays.length}개</span> 범위 선택됨
+                  </div>
+
+                  <button
+                    onClick={startReviewQuiz}
+                    disabled={selectedDays.length === 0}
+                    className="w-full md:w-auto px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold rounded-xl shadow-md transition-all flex items-center justify-center space-x-2 text-base"
+                  >
+                    <span>복습 테스트 시작하기 (30문항)</span>
+                    <ArrowRight className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      if (appState === 'QUIZ') {
+        const currentQ = quizQuestions[currentIndex];
+        const totalQ = quizQuestions.length;
+        const progressPercent = Math.round(((currentIndex + 1) / totalQ) * 100);
+
+        return (
+          <div className="min-h-screen bg-slate-50 text-slate-800 py-8 px-4 font-sans flex flex-col justify-center">
+            <div className="max-w-2xl mx-auto w-full">
+              {/* Progress Header */}
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 mb-6">
+                <div className="flex items-center justify-between mb-3 gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold px-2.5 py-1 bg-indigo-600 text-white rounded-md">
+                      {currentQ.unit}
+                    </span>
+                    <span className="text-xs font-semibold px-2 py-1 bg-slate-100 text-slate-700 rounded-md">
+                      DAY {currentQ.day} ({currentQ.subTitle})
+                    </span>
+                  </div>
+                  <span className="text-sm font-extrabold text-indigo-600">
+                    {currentIndex + 1} / {totalQ}
+                  </span>
+                </div>
+                <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                  <div
+                    className="bg-indigo-600 h-full transition-all duration-300 ease-out"
+                    style={{ width: `${progressPercent}%` }}
+                  ></div>
+                </div>
+              </div>
+
+              {/* Question Card */}
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 mb-6">
+                <div className="mb-6">
+                  <h2 className="text-lg md:text-xl font-bold text-slate-900 mb-4 leading-snug">
+                    다음 예문의 빈칸에 들어갈 어휘의 기본형으로 가장 적절한 것은?
+                  </h2>
+
+                  <div className="p-5 md:p-6 bg-slate-50 rounded-xl border border-slate-200 text-base md:text-lg text-slate-800 font-medium leading-relaxed">
+                    "{currentQ.passage}"
+                  </div>
+                </div>
+
+                {/* Options */}
+                <div className="space-y-3">
+                  {currentQ.options.map((option, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => handleSelectOption(option)}
+                      className="w-full text-left p-4 rounded-xl border border-slate-200 bg-white hover:border-indigo-500 hover:bg-indigo-50/50 text-slate-800 font-medium transition-all duration-150 flex items-center justify-between group"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <span className="w-7 h-7 rounded-lg bg-slate-100 group-hover:bg-indigo-600 group-hover:text-white text-slate-600 text-xs font-bold flex items-center justify-center transition-colors">
+                          {idx + 1}
+                        </span>
+                        <span className="text-base font-semibold">{option}</span>
+                      </div>
+                      <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-indigo-600 transition-colors" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      if (appState === 'REVIEW') {
+        const correctCount = userAnswers.filter(a => a.isCorrect).length;
+        const score = Math.round((correctCount / userAnswers.length) * 100);
+        const wrongAnswers = userAnswers.filter(a => !a.isCorrect);
+
+        return (
+          <div className="min-h-screen bg-slate-50 text-slate-800 py-8 px-4 font-sans">
+            <div className="max-w-3xl mx-auto">
+              {/* Top Return Header */}
+              <div className="flex items-center justify-between mb-6">
+                <button
+                  onClick={() => setAppState('SELECT')}
+                  className="px-4 py-2 bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold rounded-xl text-sm shadow-sm transition-colors flex items-center gap-2"
+                >
+                  <Home className="w-4 h-4 text-indigo-600" />
+                  <span>메인으로 돌아가기 (범위 다시 선택)</span>
+                </button>
+
+                <button
+                  onClick={startReviewQuiz}
+                  className="px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 font-bold rounded-xl text-sm transition-colors flex items-center gap-1.5"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  <span>같은 범위 재시험</span>
+                </button>
+              </div>
+
+              {/* Summary Banner */}
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 mb-8 text-center">
+                <div className="inline-flex p-3 rounded-full bg-indigo-50 text-indigo-600 mb-4">
+                  <Award className="w-10 h-10" />
+                </div>
+                <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
+                  복습 테스트 완료
+                </h1>
+                <p className="text-slate-500 text-sm mb-6">
+                  선택한 DAY 영역에 대한 어휘 평가가 끝났습니다.
+                </p>
+
+                <div className="grid grid-cols-3 gap-4 max-w-md mx-auto mb-6">
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <div className="text-xs text-slate-500 font-medium mb-1">최종 점수</div>
+                    <div className="text-2xl font-black text-indigo-600">{score}점</div>
+                  </div>
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <div className="text-xs text-slate-500 font-medium mb-1">맞힌 문제</div>
+                    <div className="text-2xl font-black text-slate-800">{correctCount} / {userAnswers.length}</div>
+                  </div>
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <div className="text-xs text-slate-500 font-medium mb-1">소요 시간</div>
+                    <div className="text-2xl font-black text-slate-800">{Math.floor(elapsedTime / 60)}분 {elapsedTime % 60}초</div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                  <button
+                    onClick={() => setAppState('SELECT')}
+                    className="w-full sm:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md transition-colors inline-flex items-center justify-center space-x-2"
+                  >
+                    <Home className="w-4 h-4" />
+                    <span>메인으로 돌아가기</span>
+                  </button>
+
+                  <button
+                    onClick={startReviewQuiz}
+                    className="w-full sm:w-auto px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-colors inline-flex items-center justify-center space-x-2"
+                  >
+                    <RotateCcw className="w-4 h-4" />
+                    <span>같은 범위 다시 풀기</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Wrong Answer Note */}
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+                <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center justify-between">
+                  <span>오답 노트 ({wrongAnswers.length}문항)</span>
+                  {wrongAnswers.length === 0 && (
+                    <span className="text-xs font-normal text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+                      모든 문제를 맞히셨습니다!
+                    </span>
+                  )}
+                </h2>
+
+                {wrongAnswers.length === 0 ? (
+                  <div className="text-center py-12 text-slate-500">
+                    <CheckCircle className="w-12 h-12 text-emerald-500 mx-auto mb-3 opacity-80" />
+                    <p className="font-semibold text-slate-700">틀린 문제가 없습니다.</p>
+                    <p className="text-xs mt-1 text-slate-400">완벽하게 어휘를 숙지하셨습니다!</p>
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    {wrongAnswers.map((item, idx) => (
+                      <div key={idx} className="p-5 rounded-xl border border-slate-200 bg-slate-50/50">
+                        <div className="flex items-center justify-between mb-3 gap-2">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-bold text-slate-600">
+                              문제 {item.questionIndex}
+                            </span>
+                            <span className="text-xs font-semibold px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded border border-indigo-100">
+                              {item.unit} ({item.subTitle}) • DAY {item.day}
+                            </span>
+                          </div>
+                          <span className="text-xs font-bold text-red-500 bg-red-50 px-2.5 py-0.5 rounded-md border border-red-100">
+                            오답
+                          </span>
+                        </div>
+
+                        <p className="text-slate-800 font-medium mb-4 p-4 bg-white rounded-lg border border-slate-200">
+                          "{item.passage}"
+                        </p>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm mb-3">
+                          <div className="p-3 bg-red-50/80 border border-red-200 rounded-lg text-red-900">
+                            <span className="text-xs font-bold text-red-600 block mb-0.5">내가 선택한 답</span>
+                            <span className="font-semibold">{item.chosen}</span>
+                          </div>
+                          <div className="p-3 bg-emerald-50/80 border border-emerald-200 rounded-lg text-emerald-900">
+                            <span className="text-xs font-bold text-emerald-600 block mb-0.5">올바른 정답</span>
+                            <span className="font-semibold">{item.correct}</span>
+                          </div>
+                        </div>
+
+                        <div className="p-3 bg-white border border-slate-200 rounded-lg text-xs text-slate-600">
+                          <span className="font-bold text-slate-800 mr-1">[{item.correct}] 사전적 의미:</span>
+                          {item.definition}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      return null;
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
