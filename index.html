@@ -54,7 +54,7 @@
 
     const Layers = ({ className = "w-6 h-6" }) => (
       <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 00-2-2M5 11V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
       </svg>
     );
 
@@ -93,6 +93,59 @@
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
     );
+
+    // 교재 목차 기반 5개 대단원 구성 및 정확한 DAY 페이지 설정
+    const SCHEDULE_PLAN = [
+      // Ⅰ. 어휘의 사전적 의미 (p.002~p.113)
+      { day: 1, unit: 'Ⅰ 단원', unitTitle: '어휘의 사전적 의미', subTitle: '1. 고유어 (1)', range: 'p.002~p.017', count: 28 },
+      { day: 2, unit: 'Ⅰ 단원', unitTitle: '어휘의 사전적 의미', subTitle: '1. 고유어 (2)', range: 'p.018~p.033', count: 25 },
+      { day: 3, unit: 'Ⅰ 단원', unitTitle: '어휘의 사전적 의미', subTitle: '2. 한자어 (1)', range: 'p.034~p.049', count: 24 },
+      { day: 4, unit: 'Ⅰ 단원', unitTitle: '어휘의 사전적 의미', subTitle: '2. 한자어 (2)', range: 'p.050~p.065', count: 26 },
+      { day: 5, unit: 'Ⅰ 단원', unitTitle: '어휘의 사전적 의미', subTitle: '3. 고유어와 한자어의 대응 (1)', range: 'p.066~p.081', count: 22 },
+      { day: 6, unit: 'Ⅰ 단원', unitTitle: '어휘의 사전적 의미', subTitle: '3. 고유어와 한자어의 대응 (2)', range: 'p.082~p.097', count: 20 },
+      { day: 7, unit: 'Ⅰ 단원', unitTitle: '어휘의 사전적 의미', subTitle: '실전문제 및 퍼즐', range: 'p.098~p.113', count: 20 },
+
+      // Ⅱ. 어휘의 관계별 의미 (p.114~p.211)
+      { day: 8, unit: 'Ⅱ 단원', unitTitle: '어휘의 관계별 의미', subTitle: '1. 유의 관계', range: 'p.114~p.129', count: 26 },
+      { day: 9, unit: 'Ⅱ 단원', unitTitle: '어휘의 관계별 의미', subTitle: '2. 반의 관계', range: 'p.130~p.145', count: 27 },
+      { day: 10, unit: 'Ⅱ 단원', unitTitle: '어휘의 관계별 의미', subTitle: '3. 상하 관계', range: 'p.146~p.157', count: 20 },
+      { day: 11, unit: 'Ⅱ 단원', unitTitle: '어휘의 관계별 의미', subTitle: '4. 동음이의 및 다의 관계 (1)', range: 'p.158~p.171', count: 25 },
+      { day: 12, unit: 'Ⅱ 단원', unitTitle: '어휘의 관계별 의미', subTitle: '4. 동음이의 및 다의 관계 (2)', range: 'p.172~p.185', count: 22 },
+      { day: 13, unit: 'Ⅱ 단원', unitTitle: '어휘의 관계별 의미', subTitle: '5. 같은 한자로 연결된 관계', range: 'p.186~p.197', count: 24 },
+      { day: 14, unit: 'Ⅱ 단원', unitTitle: '어휘의 관계별 의미', subTitle: '실전문제 및 퍼즐 (1)', range: 'p.198~p.205', count: 20 },
+      { day: 15, unit: 'Ⅱ 단원', unitTitle: '어휘의 관계별 의미', subTitle: '실전문제 및 퍼즐 (2)', range: 'p.206~p.211', count: 18 },
+
+      // Ⅲ. 어휘의 관용적 의미 (p.212~p.317)
+      { day: 16, unit: 'Ⅲ 단원', unitTitle: '어휘의 관용적 의미', subTitle: '1. 관용어 (1)', range: 'p.212~p.227', count: 25 },
+      { day: 17, unit: 'Ⅲ 단원', unitTitle: '어휘의 관용적 의미', subTitle: '1. 관용어 (2)', range: 'p.228~p.243', count: 29 },
+      { day: 18, unit: 'Ⅲ 단원', unitTitle: '어휘의 관용적 의미', subTitle: '2. 속담 (1)', range: 'p.244~p.259', count: 20 },
+      { day: 19, unit: 'Ⅲ 단원', unitTitle: '어휘의 관용적 의미', subTitle: '2. 속담 (2)', range: 'p.260~p.275', count: 25 },
+      { day: 20, unit: 'Ⅲ 단원', unitTitle: '어휘의 관용적 의미', subTitle: '3. 한자성어 (1)', range: 'p.276~p.291', count: 28 },
+      { day: 21, unit: 'Ⅲ 단원', unitTitle: '어휘의 관용적 의미', subTitle: '3. 한자성어 (2)', range: 'p.292~p.305', count: 22 },
+      { day: 22, unit: 'Ⅲ 단원', unitTitle: '어휘의 관용적 의미', subTitle: '실전문제 및 퍼즐 (1)', range: 'p.306~p.311', count: 23 },
+      { day: 23, unit: 'Ⅲ 단원', unitTitle: '어휘의 관용적 의미', subTitle: '실전문제 및 퍼즐 (2)', range: 'p.312~p.317', count: 21 },
+
+      // Ⅳ. 어휘의 정확한 사용 (p.318~p.445)
+      { day: 24, unit: 'Ⅳ 단원', unitTitle: '어휘의 정확한 사용', subTitle: '1. 어문 규정', range: 'p.318~p.343', count: 24 },
+      { day: 25, unit: 'Ⅳ 단원', unitTitle: '어휘의 정확한 사용', subTitle: '2. 잘못 표기하기 쉬운 단어', range: 'p.344~p.367', count: 22 },
+      { day: 26, unit: 'Ⅳ 단원', unitTitle: '어휘의 정확한 사용', subTitle: '3. 혼동하기 쉬운 단어 (1)', range: 'p.368~p.395', count: 26 },
+      { day: 27, unit: 'Ⅳ 단원', unitTitle: '어휘의 정확한 사용', subTitle: '3. 혼동하기 쉬운 단어 (2)', range: 'p.396~p.419', count: 24 },
+      { day: 28, unit: 'Ⅳ 단원', unitTitle: '어휘의 정확한 사용', subTitle: '4. 문장 다듬기', range: 'p.420~p.435', count: 22 },
+      { day: 29, unit: 'Ⅳ 단원', unitTitle: '어휘의 정확한 사용', subTitle: '실전문제 및 퍼즐', range: 'p.436~p.445', count: 25 },
+
+      // Ⅴ. 새로 생긴 말 (p.446~p.495)
+      { day: 30, unit: 'Ⅴ 단원', unitTitle: '새로 생긴 말', subTitle: '신조어 및 시사 어휘 (1)', range: 'p.446~p.473', count: 28 },
+      { day: 31, unit: 'Ⅴ 단원', unitTitle: '새로 생긴 말', subTitle: '신조어 및 시사 어휘 (2)', range: 'p.474~p.495', count: 29 }
+    ];
+
+    // 교재 목차의 큰 번호(I~V 단원) 기준 그룹핑
+    const UNIT_GROUPS = [
+      { unit: 'Ⅰ 단원', title: '어휘의 사전적 의미', days: [1, 2, 3, 4, 5, 6, 7] },
+      { unit: 'Ⅱ 단원', title: '어휘의 관계별 의미', days: [8, 9, 10, 11, 12, 13, 14, 15] },
+      { unit: 'Ⅲ 단원', title: '어휘의 관용적 의미', days: [16, 17, 18, 19, 20, 21, 22, 23] },
+      { unit: 'Ⅳ 단원', title: '어휘의 정확한 사용', days: [24, 25, 26, 27, 28, 29] },
+      { unit: 'Ⅴ 단원', title: '새로 생긴 말', days: [30, 31] }
+    ];
 
     const DICTIONARY_VOCAB_DB = {
       1: [
